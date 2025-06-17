@@ -1,9 +1,40 @@
-import example.pepita
+import roles.*
+import personajes.*
 
-describe "group of tests for pepita" {
+describe "personajes"{
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
+    test "Un personaje de fuerza 5 y rol guerrero debe tener un potencial ofensivo de 150."{
+        const personaje = new Personaje(raza = new Humano(), fuerza=5, rol=new Guerrero(), inteligencia=10)
+        assert.equals(150, personaje.potencialOfensivo())
+    }
 
+    test "Un orco brujo con fuerza 10 debe tener un 10% más de potencial ofensivo"{
+        const personaje = new Personaje(raza = new Orco(), fuerza=10, rol = new Brujo(), inteligencia=0)
+        assert.equals( 110 , personaje.potencialOfensivo())
+    }
+
+    test "Un orco no debe ser inteligente, sin importar su inteligencia"{
+        const personaje = new Personaje(raza = new Orco(), fuerza=10, rol=new Brujo(), inteligencia=65)
+
+        assert.notThat(personaje.esInteligente())
+    }
+
+    test "Un brujo es siempre groso por su rol"{
+        const personaje = new Personaje(raza = new Humano(), fuerza=20, rol=new Brujo(), inteligencia=90)
+        assert.that(personaje.esGroso())
+    }
+
+    test "Un cazador con mascota con garras de fuerza 4 debe tener un extra de 8 al potencial ofensivo."{
+        const mascota1 = new Mascota(fuerza=4, edad=4, tieneGarras=true)
+        const personaje = new Personaje(raza= new Humano(), fuerza=5, rol=new Cazador(mascota=mascota1),inteligencia=9)
+
+        assert.equals(50 + 8, personaje.potencialOfensivo())
+    }
+
+    test "Un cazador con mascota de edad 12 debe ser groso por su rol."{
+        const mascota1 = new Mascota(fuerza=5, edad=12, tieneGarras=false)
+        const personaje = new Personaje(raza= new Humano(), fuerza=5, rol=new Cazador(mascota=mascota1),inteligencia=9)
+
+        assert.that(personaje.esGroso())
+    }
 }
